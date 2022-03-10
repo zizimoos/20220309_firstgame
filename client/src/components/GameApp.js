@@ -6,8 +6,8 @@ import styled from "styled-components";
 import PlayGround from "./GameResource/PlayGround";
 import Player from "./GameResource/Player";
 import OtherPlayers from "./GameResource/OtherPlayers";
-import { useRecoilState } from "recoil";
-import { isLoginState, myIdState } from "../atoms";
+// import { useRecoilState } from "recoil";
+// import { isLoginState, myIdState, playersArrayClientState } from "../atoms";
 
 const Container = styled.div`
   width: 100vw;
@@ -32,37 +32,34 @@ const CanvasContainer = styled.div`
 const socket = io("http://localhost:3003");
 
 function GameApp(props) {
-  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
-  const [myId, setMyId] = useRecoilState(myIdState);
-  const [playersArrayClient, setPlayersArrayClient] = useState([]);
+  const [PlayerArry, setPlayerArry] = useState([]);
+  const [isLogin, setIsLogin] = useState(false);
+  const [myId, setMyId] = useState("");
 
-  socket.on("init", ({ id, players }) => {
-    console.log("my id is", id);
-    console.log("players", players);
-    setPlayersArrayClient(players);
+  socket.on("init", ({ id, playersArrayServer }) => {
+    setPlayerArry(playersArrayServer);
     setIsLogin(true);
     setMyId(id);
 
     socket.on("move-otherPlayer", (playersArrayServer) => {
       console.log("playersArrayServer", playersArrayServer);
-      setPlayersArrayClient(playersArrayServer);
+      setPlayerArry(playersArrayServer);
     });
   });
+  console.log("PlayerArry", PlayerArry);
   return (
     <Container>
       <Title>PlayGround</Title>
       <LoginMessage>{isLogin ? `Hello : ${myId}  connected` : ""}</LoginMessage>
       <CanvasContainer>
         <Canvas>
-          <RecoilRoot>
-            <ambientLight />
-            <pointLight position={[10, 10, 10]} />
-            <Player id={myId} socket={socket} />
-            {playersArrayClient.map((id, index) => (
-              <OtherPlayers key={index} id={id} />
-            ))}
-            <PlayGround />
-          </RecoilRoot>
+          <ambientLight />
+          <pointLight position={[10, 10, 10]} />
+          <Player id={myId} socket={socket} />
+          {PlayerArry.map((id, index) => (
+            <OtherPlayers key={index} id={id} />
+          ))}
+          <PlayGround />
         </Canvas>
       </CanvasContainer>
     </Container>

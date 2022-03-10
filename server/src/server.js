@@ -22,19 +22,21 @@ let playersArrayServer = [];
 io.on("connection", (socket) => {
   console.log("🔗 User connected", "socket.id :", socket.id);
   playersArrayServer.push({ id: socket.id, x: 0, y: 0, point: 0 });
-  socket.emit("init", { id: socket.id, players: playersArrayServer });
-  console.log("playersArrayServer", playersArrayServer);
+  console.log("init", playersArrayServer);
+  socket.emit("init", {
+    id: socket.id,
+    playersArrayServer: playersArrayServer,
+  });
 
-  socket.on("player-move", (myMoveInfo) => {
-    console.log("🔗 Player move", myMoveInfo);
-
-    const updatedPlayers = playersArrayServer.filter((player) => {
-      console.log(player.id, myMoveInfo.id);
-      return player.id !== myMoveInfo.id;
-    });
-    console.log("updatedPlayers", updatedPlayers);
-    playersArrayServer = [...updatedPlayers, myMoveInfo];
+  socket.on("player-move", (myPlayInfo) => {
+    console.log("🔗 player-move", myPlayInfo);
     console.log("playersArrayServer", playersArrayServer);
+    if (myPlayInfo.id === socket.id) {
+      let updatedPlayers = playersArrayServer.filter(
+        (player) => player.id !== myPlayInfo.id
+      );
+      playersArrayServer = [...updatedPlayers, myPlayInfo];
+    }
     socket.broadcast.emit("move-otherPlayer", playersArrayServer);
   });
 

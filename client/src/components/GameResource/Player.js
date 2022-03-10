@@ -1,10 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { myMoveInfoState } from "../../atoms";
 
 function Player({ id, socket }) {
   const myMove = useRef(null);
-  const [myMoveInfo, setMyMoveInfo] = useRecoilState(myMoveInfoState);
+  const [myMoveInfo, setMyMoveInfo] = useState();
 
   document.onkeydown = (e) => {
     switch (e.keyCode) {
@@ -30,9 +30,7 @@ function Player({ id, socket }) {
     };
     console.log("myPlayInfo", myPlayInfo);
     setMyMoveInfo(myPlayInfo);
-    console.log("myMoveInfo", myMoveInfo);
-
-    socket.emit("player-move", myMoveInfo);
+    socket.emit("player-move", myPlayInfo);
   };
 
   return (
