@@ -1,9 +1,9 @@
 import React from "react";
 
-function OtherPlayers(props) {
+function OtherPlayers({ id, x, y }) {
   return (
     <group>
-      <mesh position={[1, 0, 0]} castShadow>
+      <mesh position={[x, y, 0]} castShadow>
         <boxBufferGeometry attach="geometry" args={[0.3, 0.3, 0.3]} />
         <meshStandardMaterial attach="material" color="fuchsia" />
       </mesh>

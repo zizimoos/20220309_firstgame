@@ -4,7 +4,7 @@ import { myMoveInfoState } from "../../atoms";
 
 function Player({ id, socket }) {
   const myMove = useRef(null);
-  const [myMoveInfo, setMyMoveInfo] = useState();
+  const [myMoveInfo, setMyMoveInfo] = useRecoilState(myMoveInfoState);
 
   document.onkeydown = (e) => {
     switch (e.keyCode) {

@@ -6,8 +6,8 @@ import styled from "styled-components";
 import PlayGround from "./GameResource/PlayGround";
 import Player from "./GameResource/Player";
 import OtherPlayers from "./GameResource/OtherPlayers";
-// import { useRecoilState } from "recoil";
-// import { isLoginState, myIdState, playersArrayClientState } from "../atoms";
+import { useRecoilState } from "recoil";
+import { isLoginState, myIdState, playersArrayClientState } from "../atoms";
 
 const Container = styled.div`
   width: 100vw;
@@ -32,9 +32,9 @@ const CanvasContainer = styled.div`
 const socket = io("http://localhost:3003");
 
 function GameApp(props) {
-  const [PlayerArry, setPlayerArry] = useState([]);
-  const [isLogin, setIsLogin] = useState(false);
-  const [myId, setMyId] = useState("");
+  const [PlayerArry, setPlayerArry] = useRecoilState(playersArrayClientState);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+  const [myId, setMyId] = useRecoilState(myIdState);
 
   socket.on("init", ({ id, playersArrayServer }) => {
     setPlayerArry(playersArrayServer);
@@ -53,13 +53,20 @@ function GameApp(props) {
       <LoginMessage>{isLogin ? `Hello : ${myId}  connected` : ""}</LoginMessage>
       <CanvasContainer>
         <Canvas>
-          <ambientLight />
-          <pointLight position={[10, 10, 10]} />
-          <Player id={myId} socket={socket} />
-          {PlayerArry.map((id, index) => (
-            <OtherPlayers key={index} id={id} />
-          ))}
-          <PlayGround />
+          <RecoilRoot>
+            <ambientLight />
+            <pointLight position={[10, 10, 10]} />
+            <Player id={myId} socket={socket} />
+            {PlayerArry.map((otherPlayer, index) => (
+              <OtherPlayers
+                key={index}
+                id={otherPlayer.id}
+                x={otherPlayer.x}
+                y={otherPlayer.y}
+              />
+            ))}
+            <PlayGround />
+          </RecoilRoot>
         </Canvas>
       </CanvasContainer>
     </Container>
