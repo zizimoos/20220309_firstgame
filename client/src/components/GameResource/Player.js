@@ -1,8 +1,21 @@
 import React, { useRef } from "react";
+import { Html } from "@react-three/drei";
 import { useRecoilState } from "recoil";
 import { myMoveInfoState } from "../../atoms";
+import styled from "styled-components";
 
-function Player({ id, socket, coinArry }) {
+const NameTag = styled.div`
+  padding-top: 10px;
+  transform: translate3d(-20%, -200%, 0);
+  text-align: left;
+  background: #202035;
+  color: white;
+  padding: 5px 5px;
+  border-radius: 5px;
+  font-size: 1rem;
+`;
+
+function Player({ id, socket, coinArry, playerArray }) {
   const myMove = useRef(null);
   const [myMoveInfo, setMyMoveInfo] = useRecoilState(myMoveInfoState);
 
@@ -44,6 +57,10 @@ function Player({ id, socket, coinArry }) {
     if (target.length > 0) {
       socket.emit("coin-remove", target[0].id, myPlayInfo);
     }
+
+    //다른 플레이어어레이 중에 나를 제외하고
+    //자신의 위치와 같은 위치의 코인이 있는지 확인
+    //있으면 ... 채팅 혹은 화상채팅 할 것인지 물어보고
   };
 
   return (
@@ -51,6 +68,9 @@ function Player({ id, socket, coinArry }) {
       <mesh>
         <boxGeometry attach="geometry" args={[0.3, 0.3, 0.3]} />
         <meshStandardMaterial attach="material" color="teal" />
+        <Html distanceFactor={5}>
+          <NameTag> {id.slice(0, 6)} </NameTag>
+        </Html>
         <axesHelper args={[1]} />
       </mesh>
     </group>

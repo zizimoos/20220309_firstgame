@@ -51,6 +51,7 @@ function GameApp(props) {
 
     socket.on("move-otherPlayer", (playersArrayServer) => {
       console.log("playersArrayServer", playersArrayServer);
+
       setPlayerArry(playersArrayServer);
     });
 
@@ -69,7 +70,12 @@ function GameApp(props) {
           <RecoilRoot>
             <ambientLight />
             <pointLight position={[10, 10, 10]} />
-            <Player id={myId} socket={socket} coinArry={coinArry} />
+            <Player
+              id={myId}
+              socket={socket}
+              coinArry={coinArry}
+              playerArray={PlayerArry}
+            />
             {PlayerArry.map((otherPlayer, index) => (
               <OtherPlayers
                 key={index}
