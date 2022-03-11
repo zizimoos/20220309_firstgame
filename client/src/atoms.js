@@ -24,3 +24,8 @@ export const playersArrayClientState = atom({
   key: "playersArrayClientState",
   default: [],
 });
+
+export const coinsArrayClientState = atom({
+  key: "coinsArrayClientState",
+  default: [],
+});

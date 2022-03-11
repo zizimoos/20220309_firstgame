@@ -18,14 +18,23 @@ const io = new Server(server, {
 
 /////////////////////////////////////////////////////////////////
 let playersArrayServer = [];
+let coinsArrayServer = [];
+for (let i = 0; i < 50; i++) {
+  coinsArrayServer.push({
+    id: i,
+    x: Math.random() * 6 - 3,
+    y: Math.random() * 6 - 3,
+  });
+}
 
 io.on("connection", (socket) => {
   console.log("🔗 User connected", "socket.id :", socket.id);
-  playersArrayServer.push({ id: socket.id, x: 0, y: 0, point: 0 });
+  // playersArrayServer.push({ id: socket.id, x: 0, y: 0, point: 0 });
   console.log("init", playersArrayServer);
   socket.emit("init", {
     id: socket.id,
     playersArrayServer: playersArrayServer,
+    coinsArrayServer: coinsArrayServer,
   });
 
   socket.on("player-move", (myPlayInfo) => {
@@ -38,6 +47,14 @@ io.on("connection", (socket) => {
       playersArrayServer = [...updatedPlayers, myPlayInfo];
     }
     socket.broadcast.emit("move-otherPlayer", playersArrayServer);
+  });
+
+  socket.on("coin-remove", (coinId, myPlayInfo) => {
+    console.log("🔗 coin-remove", coinId, myPlayInfo);
+    let updatedCoins = coinsArrayServer.filter((coin) => coin.id !== coinId);
+    coinsArrayServer = [...updatedCoins];
+    socket.broadcast.emit("remove-coin", coinsArrayServer);
+    socket.emit("remove-coin", coinsArrayServer);
   });
 
   socket.on("disconnecting", () => {});
