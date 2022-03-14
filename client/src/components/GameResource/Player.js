@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Html } from "@react-three/drei";
 import { useRecoilState } from "recoil";
-import { myMoveInfoState } from "../../atoms";
+import { myMoveInfoState, chattingOnState } from "../../atoms";
 import styled from "styled-components";
 
 const NameTag = styled.div`
@@ -14,10 +14,16 @@ const NameTag = styled.div`
   border-radius: 5px;
   font-size: 1rem;
 `;
+const ChattWindow = styled.div`
+  padding: 5px;
+  border-radius: 5px;
+  background-color: white;
+`;
 
 function Player({ id, socket, coinArry, playerArray }) {
   const myMove = useRef(null);
   const [myMoveInfo, setMyMoveInfo] = useRecoilState(myMoveInfoState);
+  const [chattOn, setChattOn] = useRecoilState(chattingOnState);
 
   document.onkeydown = (e) => {
     switch (e.keyCode) {
@@ -41,7 +47,7 @@ function Player({ id, socket, coinArry, playerArray }) {
       y: myMove.current.position.y,
       point: 0,
     };
-    console.log("myPlayInfo", myPlayInfo);
+    // console.log("myPlayInfo", myPlayInfo);
     setMyMoveInfo(myPlayInfo);
     socket.emit("player-move", myMoveInfo);
 
@@ -53,7 +59,7 @@ function Player({ id, socket, coinArry, playerArray }) {
         coin.y >= myPlayInfo.y - 0.2
       );
     });
-    console.log("target", target);
+    // console.log("target", target);
     if (target.length > 0) {
       socket.emit("coin-remove", target[0].id, myPlayInfo);
     }
@@ -61,6 +67,15 @@ function Player({ id, socket, coinArry, playerArray }) {
     //다른 플레이어어레이 중에 나를 제외하고
     //자신의 위치와 같은 위치의 코인이 있는지 확인
     //있으면 ... 채팅 혹은 화상채팅 할 것인지 물어보고
+    console.log("playerArray", playerArray[0].x);
+    console.log("myPlayInfo", myPlayInfo.x);
+
+    if (
+      playerArray[0].x === myPlayInfo.x &&
+      playerArray[0].y === myPlayInfo.y
+    ) {
+      setChattOn(true);
+    }
   };
 
   return (
@@ -70,6 +85,11 @@ function Player({ id, socket, coinArry, playerArray }) {
         <meshStandardMaterial attach="material" color="teal" />
         <Html distanceFactor={5}>
           <NameTag> {id.slice(0, 6)} </NameTag>
+          {chattOn ? (
+            <ChattWindow>
+              chatting window chatting window chatting window
+            </ChattWindow>
+          ) : null}
         </Html>
         <axesHelper args={[1]} />
       </mesh>

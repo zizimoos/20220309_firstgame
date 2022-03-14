@@ -51,12 +51,11 @@ function GameApp(props) {
 
     socket.on("move-otherPlayer", (playersArrayServer) => {
       console.log("playersArrayServer", playersArrayServer);
-
       setPlayerArry(playersArrayServer);
     });
 
     socket.on("remove-coin", (coinsArrayServer) => {
-      console.log("new_coinsArrayServer", coinsArrayServer);
+      // console.log("new_coinsArrayServer", coinsArrayServer);
       setCoinArry(coinsArrayServer);
     });
   });
@@ -64,7 +63,9 @@ function GameApp(props) {
   return (
     <Container>
       <Title>PlayGround</Title>
-      <LoginMessage>{isLogin ? `Hello : ${myId}  connected` : ""}</LoginMessage>
+      <LoginMessage>
+        {isLogin ? `PlayerId : ${myId}  connected` : ""}
+      </LoginMessage>
       <CanvasContainer>
         <Canvas>
           <RecoilRoot>

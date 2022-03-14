@@ -44,7 +44,8 @@ io.on("connection", (socket) => {
       let updatedPlayers = playersArrayServer.filter(
         (player) => player.id !== myPlayInfo.id
       );
-      playersArrayServer = [...updatedPlayers, myPlayInfo];
+      // playersArrayServer = [...updatedPlayers, myPlayInfo];
+      playersArrayServer = [myPlayInfo];
     }
     socket.broadcast.emit("move-otherPlayer", playersArrayServer);
   });

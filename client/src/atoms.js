@@ -29,3 +29,8 @@ export const coinsArrayClientState = atom({
   key: "coinsArrayClientState",
   default: [],
 });
+
+export const chattingOnState = atom({
+  key: "chattingOnState",
+  default: false,
+});
