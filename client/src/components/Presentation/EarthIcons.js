@@ -89,7 +89,7 @@ export default function EarthIcons() {
     <Canvas
       dpr={[1, 2]}
       camera={{ position: [5, 0, 0], fov: 50 }}
-      style={{ width: "100vw", height: "80vh", backgroundColor: "#fff" }}
+      style={{ width: "100vw", height: "100vh", backgroundColor: "#fff" }}
     >
       <ambientLight intensity={0.5} />
       <Suspense fallback={null}>
