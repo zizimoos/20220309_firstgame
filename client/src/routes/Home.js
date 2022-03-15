@@ -1,13 +1,28 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+import About from "../components/Presentation/About";
+import EarthIcons from "../components/Presentation/EarthIcons";
+import Intro from "../components/Presentation/Intro";
+import Product from "../components/Presentation/Product";
+import RagDoll from "../components/Presentation/RagDoll";
+
+const NavigatorItem = styled.div`
+  padding: 10px;
+  color: white;
+`;
 
 function Home(props) {
   return (
-    <div>
+    <>
+      <Intro></Intro>
+      <About></About>
+      <Product></Product>
+      <RagDoll></RagDoll>
+      <EarthIcons></EarthIcons>
       <Link to="/gameapp">
-        <h1>GO Multiplayer Game</h1>
+        <NavigatorItem>GAME</NavigatorItem>
       </Link>
-    </div>
+    </>
   );
 }
 
